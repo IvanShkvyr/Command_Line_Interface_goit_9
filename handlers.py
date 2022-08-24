@@ -1,5 +1,8 @@
 from typing import Dict, Callable
 from contacts import contact_book
+from contacts import AddressBook, Name, Phone, Email, Record
+
+
 
 
 def input_error(func):
@@ -26,6 +29,12 @@ def hello_h(*args):
 @input_error
 def add_h(user_name: str, numbers: str):
     if contact_book.get(user_name) is None:
+
+
+        #address_book.add_contact(name=Name(value=user_name), phone=Phone(value=numbers))
+
+
+
         contact_book[user_name] = numbers
         return "The data is recorded"
     raise ValueError('The name is duplicated') # Raises an error if the name is duplicated
