@@ -61,3 +61,23 @@ command "when birthday ..."
 
 command "good bye", "close", "exit"
     According to any of these commands, the bot completes its work after outputting "Good bye!" to the console.
+
+command "find by phone ..."
+    Searches phone records according to an expression. Instead of ... the user enters a part of the phone number, necessarily with a space (any punctuation marks can be used).
+    example: find by phone 093
+    result:
+    
+        Ivan- tel: [093-591-62-82, 096-458-96-51, 044-258-98-87]; e-mail: None; birthday: None
+        Taras- tel: [093-199-28-10]; e-mail: None; birthday: None
+
+command "find by name ..."
+
+   Searches records for a name according to an expression. Instead of ... the user enters a part of the name, necessarily with a space (case does not affect the search result).
+    example: find by name Ta
+    result:
+        Tania- tel: [096-187-29-72, 067-159-63-52, 067-569-87-58]; e-mail: None; birthday: None
+        Taras- tel: [093-199-28-10]; e-mail: None; birthday: None
+
+
+
+

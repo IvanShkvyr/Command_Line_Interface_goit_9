@@ -1,7 +1,8 @@
-from re import search
-from typing import Dict, Callable
 from collections import UserDict
 from datetime import datetime
+from pickle import dump, load
+from re import search
+from typing import Dict, Callable
 
 
 class Main:
@@ -26,7 +27,11 @@ class Main:
                 "show 3": [False, False, False, False],
                 "good bye": [False, False, False, False],
                 "close": [False, False, False, False],
-                "exit": [False, False, False, False]
+                "exit": [False, False, False, False],
+                "save": [False, False, False, False],
+                "load": [False, False, False, False],
+                "find by phone": [True, False, False, False],
+                "find by name": [True, False, False, False],
                 } 
 
     def run_cli(self):
@@ -277,8 +282,49 @@ class Record:
             result = (birthday - current_date).days
         else:
             return f"Today {name}'s birthday!!!"
-
         return f" There are {result} days left until {name}'s birthday"
+
+    def find_by_name(self, name: Name, *args):
+        """Searches for records by name match"""
+        found_name = ""
+        for address_name in address_book.data.keys():
+            if name.lower() in address_name.lower():
+                us_name = address_book.data[address_name].name
+                us_phone = address_book.data[address_name].phones
+                us_email = address_book.data[address_name].emails
+                us_birthday = address_book.data[address_name].birthdays
+                found_name += f"{us_name}- tel: {us_phone}; e-mail: {us_email}; birthday: {us_birthday}\n"
+        if not found_name:
+            found_name = "The search did not yield any results"
+        return found_name
+
+    def find_by_phone(self, phone, *args):
+        """Searches for records by phone match"""
+        phone_pattern = self._normalize_phones(phone)
+        found_phones = ""
+
+        for address_name in address_book.data.keys():
+            for phone in address_book.data[address_name].phones:
+                flag = search(phone_pattern, str(phone))
+                if flag:
+                    us_name = address_book.data[address_name].name
+                    us_phone = address_book.data[address_name].phones
+                    us_email = address_book.data[address_name].emails
+                    us_birthday = address_book.data[address_name].birthdays
+                    found_phones += f"{us_name}- tel: {us_phone}; e-mail: {us_email}; birthday: {us_birthday}\n"
+        if not found_phones:
+            found_phones = "The search did not yield any results"
+        
+        return found_phones
+
+    def _normalize_phones (self, phone):
+        """Normalizes the expression for searching by phone"""
+        norm_phone = ""
+        for char in phone:
+            if char.isdigit():
+                norm_phone += char
+        phone_pattern = "[" + "].?[".join(norm_phone) + "]"
+        return phone_pattern
 
 
 class AddressBook(UserDict, Record):
@@ -325,6 +371,17 @@ class AddressBook(UserDict, Record):
     def show_3_records(self, *args):
         """Returns 3 records"""
         return self.__next__()
+    
+    def save_address_book(self, *args):
+        
+        with open("save.bin", "wb") as file:
+            dump(self.data, file)
+        return "The Address Book has been saved"
+        
+    def load_address_book(self, *args):
+        with open ("save.bin", "rb") as file:
+            self.data = load(file)
+        return "The Address Book has been loaded"
 
 
 def help_h(*args):
@@ -375,7 +432,11 @@ handlers: Dict[str, Callable] = {
     "show 3": address_book.show_3_records,
     "good bye": exit_h,
     "close": exit_h,
-    "exit": exit_h
+    "exit": exit_h,
+    "save": address_book.save_address_book,
+    "load": address_book.load_address_book,
+    "find by phone": address_book.find_by_phone,
+    "find by name": address_book.find_by_name
     }
 
 
