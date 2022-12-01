@@ -1,83 +1,60 @@
 # Command_Line_Interface_goit_9
 A console assistant bot that will recognize commands entered from the keyboard and respond accordingly.
 
-"help" command
-    Displays a description of all commands
+### "help" command  
+Displays a description of all commands
 
-"hello" command
-    Responds to the console "How can I help you?"
+    help
 
-command "create ..."
-    Stores a new contact in memory. Instead of ... the user enters the name and phone number, necessarily with a space.
-    "name" can consist of several words separated by a space
-    "phone" should have the structure \+?\d?\d?\(?\d{3}.?\d{2,3}.?\d{2,3}.?\d{2,3} (for example 093-000-00-00 or +38(097)123-45-67)
-    example: create Ivan Shkvyr 093-111-22-33
+### "hello" command  
+Responds to the console "How can I help you?"
 
-command "add phone ..."
-    Adds another phone to the contact. Instead of ... the user enters the name and phone number, necessarily with a space.
-    example: add phone Ivan Shkvyr 093-222-33-44
+    hello
 
-command "change phone ..."
-    Changes all phones to the entered one. Instead of ... the user enters the name and phone number, necessarily with a space.
-    example: change phone Ivan Shkvyr 093-333-44-55
+### command "create ..."  
+Stores a new contact in DB. Instead of ... the user enters the name and phone number, necessarily with a space.
+"name" can consist of one word
+"phone" should have the structure \+?\d?\d?\(?\d{3}.?\d{2,3}.?\d{2,3}.?\d{2,3} (for example 093-000-00-00 or +38(097)123-45-67)
+example:
 
-command "delete phone ..."
-    Deletes all phones in the contact. Instead of ... the user enters a name.
-    example: delate phone Ivan Shkvyr
+    create Ivan 093-111-22-33  
 
-command "add email ..."
-    Adds e-mail to the contact. Instead of ... the user enters the name and e-mail, necessarily with a space.
-    example: add email Ivan Shkvyr gis2011i@gmail.com
+### command "remove ..."  
+SDeletes a record in the database. Instead of ... the user enters the record number.
+example:
 
-command "change email ..."
-    Changes e-mail to the entered one. Instead of ... the user enters the name and e-mail, necessarily with a space.
-    example: change email Ivan Shkvyr gis2011i@gmail.com
+    remove 3  
 
-command "delate email ..."
-    Deletes e-mail in the contact. Instead of ... the user enters a name.
-    example: delate email Ivan Shkvyr
+### command "update ..."  
 
-command "add birthday ..."
-    Adds birthday to the contact. Instead of ... the user enters the name and birthday (Numbers can be separated by any symbol), necessarily with a space.
-    example: add birthday Ivan Shkvyr 12-06-1987
+The user can change any data in the database. Instead of ... the user enters the name of the data, the data to be 
+changed and the number of the record in the database, necessarily with a space.
 
-command "change birthday ..."
-    Changes birthday to the entered one. Instead of ... the user enters the name and birthday (Numbers can be separated by any symbol), necessarily with a space.
-    example: change birthday Ivan Shkvyr 19-06-1988
+    update phone 093-333-44-55 3
 
-command "delate birthday ..."
-    Deletes birthday in the contact. Instead of ... the user enters a name.
-    example: delate birthday Ivan Shkvyr
+### command "when birthday ..."  
+Returns the number of days until the next birthday. Instead of ... the user enters the number of the record 
+in the database.
 
-command "when birthday ..."
-    Returns the number of days until the next birthday. Instead of ... the user enters a name.
-    example: when birthday Ivan Shkvyr
+    when birthday 3
 
-"show all" command
-    With this command, the bot outputs all saved contacts with phone numbers to the console.
+### "show all" command  
+With this command, the bot outputs all saved contacts to the console.
 
-"show 3" command
-    Outputs 3 entries from the address book at a time
+    show all
 
-command "good bye", "close", "exit"
-    According to any of these commands, the bot completes its work after outputting "Good bye!" to the console.
+### "show ..." command  
+Retrieves records from the database by record number
 
-command "find by phone ..."
-    Searches phone records according to an expression. Instead of ... the user enters a part of the phone number, necessarily with a space (any punctuation marks can be used).
-    example: find by phone 093
-    result:
-    
-        Ivan- tel: [093-591-62-82, 096-458-96-51, 044-258-98-87]; e-mail: None; birthday: None
-        Taras- tel: [093-199-28-10]; e-mail: None; birthday: None
+    show 3
 
-command "find by name ..."
+### command "good bye", "close", "exit"  
+According to any of these commands, the bot completes its work after outputting "Good bye!" to the console.
 
-   Searches records for a name according to an expression. Instead of ... the user enters a part of the name, necessarily with a space (case does not affect the search result).
-    example: find by name Ta
-    result:
-        Tania- tel: [096-187-29-72, 067-159-63-52, 067-569-87-58]; e-mail: None; birthday: None
-        Taras- tel: [093-199-28-10]; e-mail: None; birthday: None
+    good bye
+or
 
+    close
+or
 
-
-
+    exit

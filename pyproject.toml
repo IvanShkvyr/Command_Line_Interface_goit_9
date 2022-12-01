@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "command-line-interface-goit-9"
+version = "0.1.0"
+description = ""
+authors = ["IvanShkvyr <Gis2011I@gmail.com>"]
+readme = "README.md"
+packages = [{include = "command_line_interface_goit_9"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.8.1"
+faker = "^15.3.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
