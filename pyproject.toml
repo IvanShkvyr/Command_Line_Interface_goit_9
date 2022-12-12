@@ -10,6 +10,8 @@ packages = [{include = "command_line_interface_goit_9"}]
 python = "^3.10"
 alembic = "^1.8.1"
 faker = "^15.3.4"
+pymongo = "^4.3.3"
+mongoengine = "^0.24.2"
 
 
 [build-system]

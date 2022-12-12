@@ -19,40 +19,19 @@ class Main:
     # is_phone_is_name[command][3]==birthday
     # is_phone_is_name[command][4]==id
 
-    # for SQL DB
-    # is_phone_is_name = {
-    #             "help": [False, False, False, False, False],
-    #             "hello": [False, False, False, False, False],
-    #             "create": [True, True, False, False, False],
-    #             "remove": [False, False, False, False, True],
-    #             "update first name": [True, False, False, False, True],
-    #             "update last name": [True, False, False, False, True],
-    #             "update phone": [False, True, False, False, True],
-    #             "update email": [False, False, True, False, True],
-    #             "update birthday": [False, False, False, True, True],
-    #             "update address": [True, False, False, False, True],
-    #             "update black list": [True, False, False, False, True],
-    #             "when birthday": [False, False, False, False, True],
-    #             "show all": [False, False, False, False, False],
-    #             "show": [False, False, False, False, True],
-    #             "good bye": [False, False, False, False, False],
-    #             "close": [False, False, False, False, False],
-    #             "exit": [False, False, False, False, False]
-    #             }
-
     # for NoSQL DB
     is_phone_is_name = {
                 "help": [False, False, False, False, False],
                 "hello": [False, False, False, False, False],
                 "create": [True, True, False, False, False],
                 "remove": [True, False, False, False, False],
-                "update first name": [True, False, False, False, False],
-                "update last name": [True, False, False, False, False],
+                "update login": [True, False, False, False, True],
+                "update last name": [True, False, False, False, True],
                 "update phone": [True, True, False, False, False],
                 "update email": [True, False, True, False, False],
                 "update birthday": [True, False, False, True, False],
-                "update address": [True, False, False, False, False],
-                "update black list": [True, False, False, False, False],
+                "update address": [True, False, False, False, True],
+                "update black list": [True, False, False, False, True],
                 "when birthday": [True, False, False, False, False],
                 "show all": [False, False, False, False, False],
                 "show": [True, False, False, False, False],
@@ -67,20 +46,16 @@ class Main:
 
             user_input = input("Command: ")
 
-            print(user_input)
+            # command, data_tail, id_ = self.parse_user_input(user_input)
 
-            command, data_tail, id_ = self.parse_user_input(user_input)
-
-            # update email Tania jnjndfke@gmail.com
-
-            # try:
-            #     command, data_tail, id_ = self.parse_user_input(user_input)
-            #     print(command, data_tail, id_)
-            # except Exception as e:
-            #     print(e)
-            #     continue
+            try:
+                command, data_tail, id_ = self.parse_user_input(user_input)
+            except Exception as e:
+                print(e)
+                continue
 
             command_handler = handlers.get(command)
+
 
             try:
                 command_response = command_handler(id_, data_tail)
@@ -94,30 +69,29 @@ class Main:
                 continue
 
     def parse_user_input(self, user_input) -> set[str, str]:
-        command, is_record_name, is_phone_number, is_email, is_birthday, is_id = self.matching_command(user_input)
+        command, is_record_name, is_phone_number, is_email, is_birthday, is_tail = self.matching_command(user_input)
 
-        if is_id:
-            id_ = self.matching_id(user_input)
+        if is_tail:
+            tail = self.matching_id(user_input)
         else:
-            id_ = None
+            tail = None
             # By default, the birthday None is given for processing commands without a id
 
         if is_phone_number:
-            phone_number = self.matching_phone_number(user_input, id_)
+            phone_number = self.matching_phone_number(user_input)
         else:
             phone_number = None
             # By default, the phone number None is given for processing commands without a phone number
 
         if is_email:
-            email = self.matching_email(user_input, id_)
+            email = self.matching_email(user_input)
         else:
             email = None
             # By default, the email None is given for processing commands without a email
 
-        print(email) #########################################################################################
 
         if is_birthday:
-            birthday = self.matching_birthday(user_input, id_)
+            birthday = self.matching_birthday(user_input)
         else:
             birthday = None
             # By default, the birthday None is given for processing commands without a birthday
@@ -130,26 +104,10 @@ class Main:
             elif is_phone_number:
                 record_name = self.matching_record_name(user_input, command, phone_number)
             else:
-                record_name = self.matching_record_name(user_input, command, id_)
+                record_name = self.matching_record_name(user_input, command, tail)
         else:
             record_name = None
             # By default, the name None is given for processing commands without a name
-
-        print(record_name)
-
-        # for SQL DB
-        # if command == "create":
-        #     return command, phone_number, record_name
-        # if is_email:
-        #     return command, email, id_
-        # elif is_birthday:
-        #     return command, birthday, id_
-        # elif is_phone_number:
-        #     return command, phone_number, id_
-        # else:
-        #     return command, record_name, id_
-
-        print(command, email, record_name)#######################################################################
 
         # for NoSQL DB
         if command == "create":
@@ -161,7 +119,7 @@ class Main:
         elif is_phone_number:
             return command, phone_number, record_name
         else:
-            return command, record_name, record_name
+            return command, tail, record_name
 
     def matching_command(self, user_input: str):
         """
@@ -175,32 +133,28 @@ class Main:
                        self.is_phone_is_name[command][4]
         raise ValueError("Unkown command!")
 
-    def matching_phone_number(self, user_input, tail):
+    def matching_phone_number(self, user_input):
         """
         Searches for a phone number in the entered pattern and returns the phone number
         """
-        if tail is not None:
-            user_input = user_input.replace(tail, "")
         phone = search("\+?\d?\d?\(?\d{3}.?\d{2,3}.?\d{2,3}.?\d{2,3}",user_input)
         if phone is None:
             raise AttributeError("Give me correct phone please")
         return phone.group()
 
-    def matching_email(self, user_input, tail):
+    def matching_email(self, user_input):
         """
         Searches for a e-mail in the entered pattern and returns the e-mail
         """
-        user_input = user_input.replace(tail, "")
         email = search("\w+[.]?\w*[.]?\w*[.]?\w*\@\w{2,100}\.\w{2,100}",user_input)
         if email is None:
             raise AttributeError("Give me correct e-mail please")
         return email.group()
 
-    def matching_birthday(self, user_input, tail):
+    def matching_birthday(self, user_input):
         """
         Searches for a birthday in the entered pattern and returns the birthday
         """
-        user_input = user_input.replace(tail, "")
         birthday = search("\d\d\d\d.\d\d.\d\d",user_input)
         if birthday is None:
             raise AttributeError("Give me correct birthday please")
@@ -228,8 +182,7 @@ class Main:
         if index == -1:
             raise AttributeError("Give me correct id")
         id_ = user_input[index + 1:]
-        if not id_.isdigit():
-            raise AttributeError("Give me correct id")
+
         return id_
 
 
@@ -244,7 +197,7 @@ def _normalize_phones(phone):
 
 
 def help_h(*args):
-    with open("README.md", "r") as fh:
+    with open("README_mongo.md", "r") as fh:
         for line in fh:
             if len(line) <= 2:
                 continue
@@ -265,7 +218,7 @@ handlers: Dict[str, Callable] = {
     "hello": hello_h,
     "create": create_record,
     "remove": remove_record,
-    "update first name": update_first_name,
+    "update login": update_first_name,
     "update last name": update_last_name,
     "update phone": update_phone,
     "update email": update_email,
